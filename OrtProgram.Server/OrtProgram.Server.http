@@ -1,0 +1,6 @@
+@OrtProgram.Server_HostAddress = http://localhost:5101
+
+GET {{OrtProgram.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
