@@ -15,11 +15,11 @@ public class TestService : ITestService
         _logger = logger;
     }
     
-    public async Task<IEnumerable<Test?>> GetAllTestsAsync()
+    public async Task<IEnumerable<Test?>> GetAllAsync()
     {
         try
         {
-            IEnumerable<Test> tests = await _testRepository.GetAllTestsAsync();
+            IEnumerable<Test> tests = await _testRepository.GetAllAsync();
             
             _logger.LogInformation($"Found {tests.Count()} tests");
 
@@ -27,9 +27,24 @@ public class TestService : ITestService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetAllTestsAsync {ex.Message}");
+            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetAllAsync {ex.Message}");
             
+            throw new Exception(ex.Message);
+        }
+    }
+
+    public async Task<Test?> GetByIdAsync(int id)
+    {
+        try
+        {
+            Test? test = await _testRepository.GetByIdAsync(id);
+            _logger.LogInformation($"Found {test?.Id} test");
+
+            return test;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetByIdAsync {ex.Message}");
             throw new Exception(ex.Message);
         }
     }

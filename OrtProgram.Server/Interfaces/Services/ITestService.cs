@@ -4,5 +4,6 @@ namespace OrtProgram.Server.Interfaces.Services;
 
 public interface ITestService
 {
-    Task<IEnumerable<Test?>> GetAllTestsAsync();
+    Task<IEnumerable<Test?>> GetAllAsync();
+    Task<Test?> GetByIdAsync(int id);
 }

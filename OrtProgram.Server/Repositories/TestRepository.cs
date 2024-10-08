@@ -14,8 +14,15 @@ public class TestRepository : ITestRepository
         _dbContext = dbContext;
     }
     
-    public async Task<IEnumerable<Test>> GetAllTestsAsync()
+    public async Task<IEnumerable<Test>> GetAllAsync()
     {
         return await _dbContext.Tests.ToListAsync();
+    }
+
+    public async Task<Test?> GetByIdAsync(int id)
+    {
+        return await _dbContext.Tests
+            .Include(q => q.Questions)    
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 }

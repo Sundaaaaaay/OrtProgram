@@ -13,6 +13,7 @@ function fetchTests() {
       // Вызов функции для отображения тестов
       displayTests(data);
     })
+    .then(response => console.log(response))
     .catch((error) => {
       console.error("There was a problem with the fetch operation:", error);
       // Показать сообщение об ошибке

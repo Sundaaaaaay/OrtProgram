@@ -4,6 +4,6 @@ namespace OrtProgram.Server.Interfaces.Repositories;
 
 public interface ITestRepository
 {
-    Task<IEnumerable<Test>> GetAllTestsAsync();
-    
+    Task<IEnumerable<Test>> GetAllAsync();
+    Task<Test?> GetByIdAsync(int id);
 }

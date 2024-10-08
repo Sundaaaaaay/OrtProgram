@@ -21,6 +21,14 @@ public class TestController : ControllerBase
     public async Task<IActionResult> GetAllTestsInfo()
     {
         _logger.LogInformation("TestController::GetAllTestsInfo");
-        return Ok(await _testService.GetAllTestsAsync());
+        return Ok(await _testService.GetAllAsync());
+    }
+
+    [Route("gettest{id:int}")]
+    [HttpGet]
+    public async Task<IActionResult> GetById([FromRoute] int id)
+    {
+        _logger.LogInformation("TestController::GetById");
+        return Ok(await _testService.GetByIdAsync(id));
     }
 }
