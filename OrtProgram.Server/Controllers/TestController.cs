@@ -1,8 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NLog;
-using OrtProgram.Server.Interfaces.Repositories;
 using OrtProgram.Server.Interfaces.Services;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace OrtProgram.Server.Controllers;
 

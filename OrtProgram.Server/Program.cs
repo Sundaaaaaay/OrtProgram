@@ -31,6 +31,28 @@ builder.Services.AddSingleton<ILogger>(serviceProvider =>
 builder.Services.AddScoped<ITestRepository, TestRepository>();
 builder.Services.AddScoped<ITestService, TestService>();
 
+// builder.Services.AddCors(options =>
+// {
+//     options.AddPolicy("AllowAllOrigins",
+//         policy =>
+//         {
+//             policy.AllowAnyOrigin() // Разрешить запросы с любого домена
+//                 .AllowAnyHeader()  // Разрешить любые заголовки
+//                 .AllowAnyMethod(); // Разрешить любые методы (GET, POST и т.д.)
+//         });
+// });
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        policy =>
+        {
+            policy.WithOrigins("http://127.0.0.1:5500") // Разрешить запросы с этого домена
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        });
+});
+
 var app = builder.Build();
 
 app.UseDefaultFiles();
@@ -43,12 +65,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors("AllowSpecificOrigin");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
-
-app.MapFallbackToFile("/index.html");
 
 app.Run();
