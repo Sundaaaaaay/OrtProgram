@@ -1,9 +1,10 @@
-﻿using OrtProgram.Server.Entities;
+﻿using OrtProgram.Server.DTO.Test;
+using OrtProgram.Server.Entities;
 
 namespace OrtProgram.Server.Interfaces.Services;
 
 public interface ITestService
 {
-    Task<IEnumerable<Test?>> GetAllAsync();
+    Task<IEnumerable<ResponseTestDto?>> GetAllAsync();
     Task<Test?> GetByIdAsync(int id);
 }
