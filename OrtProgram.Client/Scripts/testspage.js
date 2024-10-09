@@ -13,7 +13,6 @@ function fetchTests() {
       // Вызов функции для отображения тестов
       displayTests(data);
     })
-    .then(response => console.log(response))
     .catch((error) => {
       console.error("There was a problem with the fetch operation:", error);
       // Показать сообщение об ошибке
@@ -34,9 +33,24 @@ function displayTests(tests) {
 
   // Итерация по тестам и создание элементов списка
   tests.forEach((test) => {
+    console.log(test);
     const listItem = document.createElement("li");
     listItem.classList.add("list-group-item");
-    listItem.innerHTML = `<strong>Test Name:</strong> ${test.testType} <br> <strong>ID:</strong> ${test.id} <br> <strong>Description:</strong> ${test.description}`;
+
+    // Создаем ссылку для перехода к тесту
+    const testLink = document.createElement("a");
+    testLink.href = `testpage.html?testId=${test.id}`; // передаем id через URL
+    testLink.textContent = `${test.testType}`; // Название теста
+    testLink.classList.add("text-decoration-none", "text-dark");
+
+    // Форматируем содержимое элемента списка
+    listItem.innerHTML = `
+      <strong>Test Name:</strong> ${testLink.outerHTML} <br>
+      <strong>ID:</strong> ${test.id} <br>
+      <strong>Description:</strong> ${test.description} <br>
+      <strong>Questions:</strong> ${test.questionsAmount}
+    `;
+
     testList.appendChild(listItem);
   });
 }
