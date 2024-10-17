@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrtProgram.Server.DTO.Test;
 using OrtProgram.Server.Interfaces.Services;
 
 namespace OrtProgram.Server.Controllers;
@@ -30,5 +31,13 @@ public class TestController : ControllerBase
     {
         _logger.LogInformation("TestController::GetById");
         return Ok(await _testService.GetByIdAsync(id));
+    }
+
+    [Route("submitanswers")]
+    [HttpPost]
+    public async Task<IActionResult> SubmitAnswers([FromBody] UserAnswersSubmittionDto submission)
+    {
+        var results = await _testService.CheckAnswersAsync(submission.TestId, submission.Answers);
+        return Ok(results);
     }
 }

@@ -30,7 +30,7 @@ public class TestService : ITestService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetAllAsync {ex.Message}");
+            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetAllAsync: {ex.Message}");
             
             throw new Exception(ex.Message);
         }
@@ -47,8 +47,53 @@ public class TestService : ITestService
         }
         catch (Exception ex)
         {
-            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetByIdAsync {ex.Message}");
+            _logger.LogError($"Failed to get test data in TestService -> TestRepository.GetByIdAsync: {ex.Message}");
             throw new Exception(ex.Message);
+        }
+    }
+    
+    public async Task<TestResultDto> CheckAnswersAsync(int id, List<UserAnswerDto> answers)
+    {
+        try
+        {
+            var test = await _testRepository.GetByIdAsync(id);
+            if (test == null)
+            {
+                _logger.LogWarning($"Test with id: {id} not found");
+                throw new NullReferenceException($"Test with id: {id} not found");
+            }
+
+            // Подготовка вопросов для быстрого доступа
+            var questionMap = test.Questions.ToDictionary(q => q.Id);
+
+            var result = new TestResultDto { TotalQuestions = answers.Count };
+
+            foreach (var answer in answers)
+            {
+                if (!questionMap.TryGetValue(answer.QuestionId, out var question))
+                {
+                    _logger.LogWarning($"Question with id: {answer.QuestionId} not found");
+                    throw new NullReferenceException($"Question with id: {answer.QuestionId} not found");
+                }
+                
+                var isCorrect = answer.SelectedAnswer == question.rightAnswer;
+
+                result.Details.Add(new QuestionResultDtо
+                {
+                    CorrectAnswer = question.rightAnswer,
+                    IsCorrect = isCorrect,
+                    QuestionId = answer.QuestionId,
+                });
+
+                if (isCorrect) result.CorrectAnswers++;
+            }
+
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError($"Error checking answers for test {id} in TestService -> CheckAnswersAsync: {ex.Message}");
+            throw;
         }
     }
 }

@@ -112,6 +112,7 @@ function submitAnswer() {
         selectedAnswer: selectedAnswer.value,
       });
     }
+    console.log(userAnswers)
   });
 
   // Отправляем ответы на сервер

@@ -7,4 +7,5 @@ public interface ITestService
 {
     Task<IEnumerable<ResponseTestDto?>> GetAllAsync();
     Task<Test?> GetByIdAsync(int id);
+    Task<TestResultDto> CheckAnswersAsync(int id, List<UserAnswerDto> answers);
 }
