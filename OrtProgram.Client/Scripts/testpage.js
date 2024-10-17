@@ -15,6 +15,14 @@ function fetchTest() {
     .then((response) => response.json())
     .then((data) => {
       questions = data.questions;
+
+      // Показываем вопросы и кнопки для навигации
+      document.getElementById("question-container").classList.remove("d-none");
+      document
+        .getElementById("pagination-container")
+        .classList.remove("d-none");
+
+      // Отображаем вопросы
       displayQuestions();
     })
     .catch((error) => {
@@ -102,6 +110,7 @@ function togglePaginationButtons(endIndex) {
 // Функция для отправки ответа на сервер
 function submitAnswer() {
   // Собираем выбранные ответы
+  userAnswers = []; // Очищаем, чтобы избежать дублирования
   questions.forEach((question, index) => {
     const selectedAnswer = document.querySelector(
       `input[name="answer-${index}"]:checked`
@@ -112,7 +121,6 @@ function submitAnswer() {
         selectedAnswer: selectedAnswer.value,
       });
     }
-    console.log(userAnswers)
   });
 
   // Отправляем ответы на сервер
@@ -133,12 +141,55 @@ function submitAnswer() {
       return response.json();
     })
     .then((data) => {
-      alert("Answers submitted successfully!");
       console.log("Server response:", data);
+
+      // Отображаем результат для каждого вопроса
+      displayResults(data.details);
     })
     .catch((error) => {
       console.error("Error submitting answers:", error);
     });
+}
+
+// Функция для отображения результатов теста
+function displayResults(details) {
+  const questionContainer = document.getElementById("question-container");
+  questionContainer.innerHTML = ""; // Очищаем контейнер вопросов
+
+  details.forEach((detail, index) => {
+    const question = questions.find((q) => q.id === detail.questionId);
+
+    const questionElement = document.createElement("div");
+    questionElement.classList.add("mb-4");
+
+    const questionText = document.createElement("h4");
+    questionText.textContent = `Question ${index + 1}: ${
+      question.questionText
+    }`;
+    questionElement.appendChild(questionText);
+
+    // Отображаем ответ пользователя и правильный ответ
+    const userAnswer = userAnswers.find(
+      (a) => a.questionId === detail.questionId
+    ).selectedAnswer;
+    const correctAnswer = detail.correctAnswer;
+
+    const userAnswerText = document.createElement("p");
+    userAnswerText.textContent = `Your Answer: ${userAnswer}`;
+    questionElement.appendChild(userAnswerText);
+
+    const correctAnswerText = document.createElement("p");
+    correctAnswerText.textContent = `Correct Answer: ${correctAnswer}`;
+    questionElement.appendChild(correctAnswerText);
+
+    // Проверка правильности ответа
+    const resultText = document.createElement("p");
+    resultText.textContent = detail.isCorrect ? "Correct!" : "Incorrect!";
+    resultText.classList.add(detail.isCorrect ? "text-success" : "text-danger");
+    questionElement.appendChild(resultText);
+
+    questionContainer.appendChild(questionElement);
+  });
 }
 
 // Событие для нажатия кнопки "Start Test"

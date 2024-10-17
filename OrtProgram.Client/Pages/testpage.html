@@ -12,15 +12,16 @@
     <div class="container my-5">
         <h1 class="text-center mb-4">Test</h1>
 
+        <!-- Кнопка для старта теста -->
         <div id="start-test-container" class="text-center mb-4">
             <button id="start-test-btn" class="btn btn-primary">Start Test</button>
         </div>
 
         <!-- Контейнер для отображения вопросов -->
-        <div id="question-container" class="mb-4"></div>
+        <div id="question-container" class="mb-4 d-none"></div>
 
         <!-- Кнопки навигации по страницам вопросов -->
-        <div class="d-flex justify-content-between mb-4">
+        <div id="pagination-container" class="d-flex justify-content-between mb-4 d-none">
             <button id="prev-question-btn" class="btn btn-secondary" disabled>Previous</button>
             <button id="next-question-btn" class="btn btn-secondary" disabled>Next</button>
         </div>
